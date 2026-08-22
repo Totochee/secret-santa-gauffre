@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#143c32">
+  <title>Secret Santa – Famille GAUFFRE</title>
+  <style>
+    :root{--green:#143c32;--dark:#092820;--cream:#f6f0e3;--paper:#fffdf7;--red:#b44739;--gold:#c69b57;--ink:#17352d;--muted:#64736c}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:var(--cream);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+    button{font:inherit}
+    .page{min-height:100vh;position:relative;overflow:hidden;padding:26px clamp(14px,4vw,58px) 34px;background:radial-gradient(circle at 8% 18%,rgba(198,155,87,.14),transparent 25%),radial-gradient(circle at 92% 9%,rgba(180,71,57,.1),transparent 22%),var(--cream)}
+    .snow{position:absolute;inset:0;pointer-events:none;opacity:.45;background-image:radial-gradient(circle,#fff 2px,transparent 2.5px),radial-gradient(circle,rgba(20,60,50,.2) 1px,transparent 1.5px);background-position:0 0,22px 35px;background-size:95px 95px,63px 63px}
+    header,.hero,.panel,footer{position:relative;z-index:1;max-width:1040px;margin-inline:auto}
+    header{display:flex;align-items:center;gap:14px}
+    .logo{width:48px;height:48px;display:grid;place-items:center;border-radius:50%;background:var(--green);color:var(--cream);font:700 27px Georgia,serif;border:2px solid var(--gold);box-shadow:0 0 0 5px rgba(198,155,87,.15)}
+    .overline{margin:0;color:var(--red);font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}
+    .brand{margin:2px 0 0;font:700 22px Georgia,serif}
+    .counter{margin-left:auto;padding:8px 14px;border:1px solid rgba(20,60,50,.14);border-radius:999px;background:rgba(255,253,247,.8);text-align:center}
+    .counter b{margin-right:5px;color:var(--red)}
+    .counter small{font-size:11px;color:var(--muted)}
+    .hero{padding:clamp(40px,7vw,72px) 0 32px;text-align:center}
+    .date,.step{display:inline-block;color:var(--red);font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+    .date{margin:0 0 16px;padding:7px 12px;border-block:1px solid rgba(180,71,57,.35)}
+    h1{margin:0;color:var(--dark);font:600 clamp(44px,7vw,80px)/.93 Georgia,serif;letter-spacing:-.045em}
+    h1 em{color:var(--red);font-weight:400}
+    .intro{max-width:600px;margin:21px auto 0;color:var(--muted);font-size:16px;line-height:1.65}
+    .panel{padding:clamp(18px,3vw,32px);border:1px solid rgba(20,60,50,.12);border-radius:28px;background:rgba(255,253,247,.94);box-shadow:0 24px 70px rgba(33,48,42,.12)}
+    .panel-head{display:flex;align-items:end;justify-content:space-between;gap:15px;padding-bottom:21px}
+    h2{margin:5px 0 0;font:600 clamp(24px,4vw,33px) Georgia,serif}
+    .badge{padding:8px 12px;border-radius:999px;background:#edf3ee;color:var(--green);font-size:11px;font-weight:750}
+    .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+    .person{min-width:0;display:grid;grid-template-columns:38px 1fr 22px;align-items:center;gap:9px;padding:11px;border:1px solid #e3ded2;border-radius:15px;background:white;color:var(--ink);font-weight:720;text-align:left;cursor:pointer;transition:.18s ease}
+    .person:hover:not(:disabled),.person:focus-visible:not(:disabled){transform:translateY(-2px);border-color:var(--gold);box-shadow:0 8px 20px rgba(31,53,45,.1);outline:none}
+    .person:disabled{cursor:default}
+    .initial{width:38px;height:38px;display:grid;place-items:center;border-radius:50%;background:#edf2ec;color:var(--green);font:700 18px Georgia,serif}
+    .person-name{overflow-wrap:anywhere}
+    .arrow{margin-left:auto;color:var(--red);font-size:18px}
+    .person.done{opacity:.45;background:#f2efe8;text-decoration:line-through}
+    .person.done .arrow{color:#5c786d;text-decoration:none}
+    .screen{min-height:360px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;text-align:center}
+    .screen p{max-width:490px;color:var(--muted);line-height:1.65}
+    .spark{width:62px;height:62px;display:grid;place-items:center;margin-bottom:24px;border-radius:50%;background:var(--green);color:var(--gold);font-size:29px}
+    .main-btn{margin-top:14px;padding:14px 24px;border:0;border-radius:999px;background:var(--red);color:white;font-weight:800;cursor:pointer;box-shadow:0 10px 24px rgba(180,71,57,.24)}
+    .main-btn:hover,.main-btn:focus-visible{filter:brightness(.93);outline:3px solid rgba(180,71,57,.2);outline-offset:3px}
+    .text-btn{margin-top:14px;padding:7px;border:0;background:transparent;color:#69756f;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+    .reveal{margin:calc(clamp(18px,3vw,32px) * -1);min-height:360px;border-radius:28px;background:var(--green);color:white}
+    .reveal .step{color:#e8c887}
+    .reveal p{color:rgba(255,255,255,.7)}
+    .recipient{margin:20px 0 5px;color:var(--cream);font:italic 600 clamp(48px,9vw,88px)/1 Georgia,serif;letter-spacing:-.045em}
+    .cream-btn{background:var(--cream);color:var(--green);box-shadow:none}
+    .complete{display:flex;align-items:center;gap:15px;margin-top:20px;padding:18px 20px;border-radius:16px;background:var(--green);color:white}
+    .complete>span{color:var(--gold);font-size:28px}.complete strong{font:700 20px Georgia,serif}.complete p{margin:4px 0 0;color:rgba(255,255,255,.68);font-size:13px}
+    footer{display:flex;align-items:center;justify-content:space-between;gap:18px;padding-top:23px;color:#69766f;font-size:12px}
+    footer p{margin:0}footer p b{color:var(--green)}
+    .reset{border:0;background:transparent;color:#747d78;font-size:12px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+    .reset.armed{padding:9px 13px;border-radius:999px;background:var(--red);color:white;text-decoration:none}
+    .hidden{display:none!important}
+    @media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}footer{flex-direction:column;text-align:center}}
+    @media(max-width:480px){.page{padding:19px 12px 27px}.hero{padding:37px 3px 25px}.intro{font-size:14px}.panel{padding:15px;border-radius:22px}.badge{display:none}.grid{gap:8px}.person{grid-template-columns:32px 1fr;padding:9px;font-size:13px}.initial{width:32px;height:32px}.arrow{display:none}.reveal{margin:-15px;border-radius:22px}.counter small{display:none}}
+    @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="snow" aria-hidden="true"></div>
+    <header>
+      <div class="logo" aria-hidden="true">G</div>
+      <div><p class="overline">Famille Gauffre</p><p class="brand">Secret Santa</p></div>
+      <div class="counter" aria-live="polite"><b id="remaining">13</b><small>restants</small></div>
+    </header>
+
+    <section class="hero">
+      <p class="date">Noël 2026</p>
+      <h1>À qui allez-vous<br><em>faire plaisir ?</em></h1>
+      <p class="intro">Choisissez votre prénom ou votre couple, vérifiez que personne ne regarde… puis découvrez votre Secret Santa.</p>
+    </section>
+
+    <section class="panel" aria-live="polite">
+      <div id="list-screen">
+        <div class="panel-head">
+          <div><span class="step">Étape 1</span><h2>Choisissez votre prénom ou couple</h2></div>
+          <span class="badge">Tirage privé sur cet appareil</span>
+        </div>
+        <div class="grid" id="people"></div>
+        <div class="complete hidden" id="complete">
+          <span aria-hidden="true">✦</span>
+          <div><strong>Tout le monde a tiré !</strong><p>Les secrets sont bien gardés. Joyeux Noël !</p></div>
+        </div>
+      </div>
+
+      <div class="screen hidden" id="confirm-screen">
+        <div class="spark" aria-hidden="true">✦</div>
+        <span class="step">C’est bien vous ?</span>
+        <h2 id="selected-name"></h2>
+        <p>Assurez-vous que personne ne regarde votre écran avant de continuer.</p>
+        <button class="main-btn" id="reveal-btn">Révéler notre tirage</button>
+        <button class="text-btn" id="back-btn">Retour à la liste</button>
+      </div>
+
+      <div class="screen reveal hidden" id="reveal-screen">
+        <span class="step">Votre Secret Santa est…</span>
+        <div class="recipient" id="recipient"></div>
+        <p>Gardez bien le secret jusqu’au jour J.</p>
+        <button class="main-btn cream-btn" id="hide-btn">Cacher et passer au suivant</button>
+      </div>
+    </section>
+
+    <footer>
+      <p><b>✓</b> Les 3 couples participent ensemble · Aucun doublon · Aucun tirage dans sa propre famille</p>
+      <button class="reset" id="reset-btn">Recommencer le tirage</button>
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var participants = [
+        { name: "Ambre & Théo", family: 1 },
+        { name: "Max & Cécile", family: 1 },
+        { name: "Sandrine", family: 1 },
+        { name: "Patrice", family: 1 },
+        { name: "Coline & Antoine", family: 2 },
+        { name: "Simon", family: 2 },
+        { name: "Aurore", family: 2 },
+        { name: "Laurent", family: 2 },
+        { name: "Carole", family: 3 },
+        { name: "François", family: 3 },
+        { name: "Clémence", family: 3 },
+        { name: "Pierre", family: 4 },
+        { name: "Françoise", family: 4 }
+      ];
+
+      var STORAGE_KEY = "secret-santa-gauffre-2026-standalone-v1";
+      var draw = null;
+      var completed = [];
+      var selected = null;
+      var resetArmed = false;
+      var resetTimer = null;
+
+      var listScreen = document.getElementById("list-screen");
+      var confirmScreen = document.getElementById("confirm-screen");
+      var revealScreen = document.getElementById("reveal-screen");
+      var people = document.getElementById("people");
+      var remaining = document.getElementById("remaining");
+      var complete = document.getElementById("complete");
+      var selectedName = document.getElementById("selected-name");
+      var recipient = document.getElementById("recipient");
+      var resetButton = document.getElementById("reset-btn");
+
+      function randomIndex(max) {
+        var range = 4294967296;
+        var limit = range - (range % max);
+        var value;
+        var buffer = new Uint32Array(1);
+        do {
+          crypto.getRandomValues(buffer);
+          value = buffer[0];
+        } while (value >= limit);
+        return value % max;
+      }
+
+      function shuffle(values) {
+        var result = values.slice();
+        for (var i = result.length - 1; i > 0; i--) {
+          var j = randomIndex(i + 1);
+          var temporary = result[i];
+          result[i] = result[j];
+          result[j] = temporary;
+        }
+        return result;
+      }
+
+      function isValidDraw(candidate) {
+        if (!candidate || Object.keys(candidate).length !== participants.length) return false;
+        var recipients = [];
+        for (var i = 0; i < participants.length; i++) {
+          var giver = participants[i];
+          var recipientName = candidate[giver.name];
+          var recipientData = participants.find(function (person) { return person.name === recipientName; });
+          if (!recipientData || recipientData.family === giver.family) return false;
+          recipients.push(recipientName);
+        }
+        return new Set(recipients).size === participants.length;
+      }
+
+      function createDraw() {
+        var names = participants.map(function (person) { return person.name; });
+        for (var attempt = 0; attempt < 100000; attempt++) {
+          var recipients = shuffle(names);
+          var candidate = {};
+          var valid = true;
+          for (var i = 0; i < participants.length; i++) {
+            var recipientData = participants.find(function (person) { return person.name === recipients[i]; });
+            if (recipientData.family === participants[i].family) {
+              valid = false;
+              break;
+            }
+            candidate[participants[i].name] = recipients[i];
+          }
+          if (valid) return candidate;
+        }
+        throw new Error("Impossible de générer le tirage.");
+      }
+
+      function save() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ draw: draw, completed: completed }));
+      }
+
+      function load() {
+        try {
+          var saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+          if (saved && isValidDraw(saved.draw)) {
+            draw = saved.draw;
+            completed = Array.isArray(saved.completed)
+              ? saved.completed.filter(function (name) { return participants.some(function (p) { return p.name === name; }); })
+              : [];
+            return;
+          }
+        } catch (error) {}
+        draw = createDraw();
+        completed = [];
+        save();
+      }
+
+      function show(screen) {
+        listScreen.classList.toggle("hidden", screen !== "list");
+        confirmScreen.classList.toggle("hidden", screen !== "confirm");
+        revealScreen.classList.toggle("hidden", screen !== "reveal");
+      }
+
+      function render() {
+        people.innerHTML = "";
+        participants.forEach(function (person) {
+          var done = completed.indexOf(person.name) !== -1;
+          var button = document.createElement("button");
+          button.className = "person" + (done ? " done" : "");
+          button.disabled = done;
+          button.setAttribute("aria-label", done ? person.name + ", tirage déjà effectué" : "Choisir " + person.name);
+
+          var initial = document.createElement("span");
+          initial.className = "initial";
+          initial.textContent = person.name.charAt(0);
+
+          var name = document.createElement("span");
+          name.className = "person-name";
+          name.textContent = person.name;
+
+          var arrow = document.createElement("span");
+          arrow.className = "arrow";
+          arrow.setAttribute("aria-hidden", "true");
+          arrow.textContent = done ? "✓" : "→";
+
+          button.append(initial, name, arrow);
+          button.addEventListener("click", function () {
+            selected = person.name;
+            selectedName.textContent = selected;
+            show("confirm");
+          });
+          people.appendChild(button);
+        });
+
+        var left = participants.length - completed.length;
+        remaining.textContent = String(left);
+        complete.classList.toggle("hidden", left !== 0);
+      }
+
+      document.getElementById("reveal-btn").addEventListener("click", function () {
+        recipient.textContent = draw[selected];
+        show("reveal");
+      });
+
+      document.getElementById("back-btn").addEventListener("click", function () {
+        selected = null;
+        show("list");
+      });
+
+      document.getElementById("hide-btn").addEventListener("click", function () {
+        if (completed.indexOf(selected) === -1) completed.push(selected);
+        selected = null;
+        save();
+        render();
+        show("list");
+      });
+
+      resetButton.addEventListener("click", function () {
+        if (!resetArmed) {
+          resetArmed = true;
+          resetButton.classList.add("armed");
+          resetButton.textContent = "Confirmer le nouveau tirage";
+          clearTimeout(resetTimer);
+          resetTimer = setTimeout(function () {
+            resetArmed = false;
+            resetButton.classList.remove("armed");
+            resetButton.textContent = "Recommencer le tirage";
+          }, 5000);
+          return;
+        }
+        draw = createDraw();
+        completed = [];
+        selected = null;
+        resetArmed = false;
+        resetButton.classList.remove("armed");
+        resetButton.textContent = "Recommencer le tirage";
+        save();
+        render();
+        show("list");
+      });
+
+      load();
+      render();
+      show("list");
+    })();
+  </script>
+</body>
+</html>
