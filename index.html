@@ -116,7 +116,7 @@
     </header>
 
     <section class="hero">
-      <p class="date">Noël 2026</p>
+      <p class="date">Noël <span id="current-year"></span></p>
       <h1>À qui allez-vous<br><em>faire plaisir ?</em></h1>
       <p class="intro">Choisissez votre prénom ou votre couple, vérifiez que personne ne regarde… puis découvrez votre Secret Santa.</p>
     </section>
@@ -177,7 +177,8 @@
         { name: "Françoise", family: 4 }
       ];
 
-      var STORAGE_KEY = "secret-santa-gauffre-2026-standalone-v1";
+      var currentYear = new Date().getFullYear();
+      var STORAGE_KEY = "secret-santa-gauffre-" + currentYear + "-standalone-v1";
       var draw = null;
       var completed = [];
       var selected = null;
@@ -353,6 +354,7 @@
         show("list");
       });
 
+      document.getElementById("current-year").textContent = String(currentYear);
       load();
       render();
       show("list");
